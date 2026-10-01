@@ -258,7 +258,8 @@ void outputBED(char *fnamebed, TAD const &tad, char *chrnum, int chrlength,int r
 		   endp = chrlength;
 		else
 		   endp = (tad.bound[j][1] + 1)*res;
-		fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum, (tad.bound[j][0] + 1)*res, endp, j, (tad.bound[j][0] + 1)*res, endp, color_list[tl]);
+		int startp = tad.bound[j][0]*res;
+		fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum, startp, endp, j, startp, endp, color_list[tl]);
         }
         fclose(bedf);
 }
