@@ -4,6 +4,9 @@ LDLIBS ?= -lm -lcurl -lz
 SRCS = main.cpp step1.cpp step2.cpp step3.cpp step4.cpp common.cpp straw.cpp
 OBJS = $(SRCS:.cpp=.o)
 
+CLANG_FORMAT ?= clang-format
+FORMAT_FILES = $(filter-out straw.cpp straw.h,$(SRCS) $(wildcard *.h))
+
 all: OnTAD
 
 OnTAD: $(OBJS)
@@ -15,4 +18,10 @@ test: OnTAD
 clean:
 	$(RM) $(OBJS) OnTAD
 
-.PHONY: all test clean
+format:
+	$(CLANG_FORMAT) -i -style=file $(FORMAT_FILES)
+
+format-check:
+	$(CLANG_FORMAT) --dry-run --Werror -style=file $(FORMAT_FILES)
+
+.PHONY: all test clean format format-check

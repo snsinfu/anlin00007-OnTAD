@@ -12,5 +12,4 @@
 //#include <gsl/gsl_cdf.h> //use gaussian p-value function
 using namespace std;
 void printProgress(double percentage);
-bool hasEnding (string const &fullString, string const &ending);
-
+bool hasEnding(string const& fullString, string const& ending);
