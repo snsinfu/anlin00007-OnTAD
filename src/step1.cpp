@@ -14,7 +14,6 @@ int num_space(char* str, int len){
 		if(str[i] == ' ' || str[i] == '\t') num++;
 	}
 
-	printf("in %s, return num of column = %d\n", __FUNCTION__, num+1);
 	return (num+1);
 }
 
@@ -86,7 +85,6 @@ void loadMatrixFromHiC(
 	} else {
 		L = (chrlength / resolution) + 1;
 	}
-	std::cout << L << std::endl;
 
 	for (int i = 0; i < L; i++) {
 		vector<double> tx(L, 0);
