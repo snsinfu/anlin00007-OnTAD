@@ -16,9 +16,10 @@ void HiCnorm(vector<vector<double>>& x, int maxsz)
     const int l = static_cast<int>(x.size());
     printf("\n");
 
-    for (int i = 0; i < min(l - 1, maxsz); i++)
+    const int diag = min(l - 1, maxsz);
+    for (int i = 0; i < diag; i++)
     {
-        printProgress(static_cast<double>(i + 1) / static_cast<double>(min(l - 1, maxsz)));
+        printProgress(static_cast<double>(i + 1) / static_cast<double>(diag));
         vector<double> tx(static_cast<size_t>(l - i));
         for (int j = 0; j < l - i; j++)
         {

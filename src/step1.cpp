@@ -45,6 +45,8 @@ void loadMatrix(const string& fname, vector<vector<double>>& x, int maxsz) //rea
         vector<double> tx(L, 0);
         k = 0;
         size_t j = 0;
+        const int lo = n - maxsz;
+        const int hi = n + maxsz;
         while (j < l)
         {
             if (L == 0)
@@ -61,12 +63,12 @@ void loadMatrix(const string& fname, vector<vector<double>>& x, int maxsz) //rea
             }
             else
             {
-                if (k >= n - maxsz && k <= n + maxsz)
+                if (k >= lo && k <= hi)
                 {
                     tx[k] = atof(&tmp[j]);
                 }
                 k++;
-                if (k > n + maxsz)
+                if (k > hi)
                 {
                     break;
                 }
