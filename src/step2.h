@@ -1,8 +1,7 @@
+#pragma once
 #include "common.h"
 
-using namespace std;
-
-void cumsum(vector<vector<double>> const& x, vector<vector<double>>& sx);                           // Step2
-void getScore(vector<vector<double>> const& sx, int maxsz, vector<vector<double>>& score);          // Step2
-void calMins(vector<vector<double>> const& score, vector<vector<bool>>& lm, int hsz, double ldiff); // Step2
-void setPair(vector<vector<bool>> const& lm, vector<vector<bool>>& sel);                            // Step2
+void cumsum(std::vector<std::vector<double>> const& x, std::vector<std::vector<double>>& sx);                           // Step2
+void getScore(std::vector<std::vector<double>> const& sx, int maxsz, std::vector<std::vector<double>>& score);          // Step2
+void calMins(std::vector<std::vector<double>> const& score, std::vector<std::vector<bool>>& lm, int hsz, double ldiff); // Step2
+void setPair(std::vector<std::vector<bool>> const& lm, std::vector<std::vector<bool>>& sel);                            // Step2

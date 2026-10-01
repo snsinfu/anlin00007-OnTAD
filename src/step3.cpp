@@ -5,6 +5,7 @@
 #include <iterator>
 #include <sys/stat.h>
 
+using namespace std;
 /*---------------------------------------------------------------*/
 /* Step3: remove distance effect
  *    Input: data matrix

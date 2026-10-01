@@ -1,24 +1,23 @@
+#pragma once
 #include "common.h"
 
-using namespace std;
-
-typedef struct TAD
+struct TAD
 {
-    vector<vector<int>> bound;
-    vector<int> level;
-    vector<double> score, mean;
-} TAD;
+    std::vector<std::vector<int>> bound;
+    std::vector<int> level;
+    std::vector<double> score, mean;
+};
 
-typedef struct DATA
+struct DATA
 {
-    string fname;
-    vector<vector<double>> x;
-    vector<vector<bool>> sel;
+    std::string fname;
+    std::vector<std::vector<double>> x;
+    std::vector<std::vector<bool>> sel;
     TAD tad;
-} DATA;
+};
 
-void dpcall(vector<vector<double>> const& x, vector<vector<double>> const& sx, int st, int ed, int minsz, int maxsz, double penalty, vector<vector<bool>> const& sel, double& score, double& mean);
-void getBound(int st, int ed, int level, vector<vector<double>> const& x, vector<vector<double>> const& sx, TAD& tad);
-void outputTAD(const string& fname, TAD const& tad);
+void dpcall(std::vector<std::vector<double>> const& x, std::vector<std::vector<double>> const& sx, int st, int ed, int minsz, int maxsz, double penalty, std::vector<std::vector<bool>> const& sel, double& score, double& mean);
+void getBound(int st, int ed, int level, std::vector<std::vector<double>> const& x, std::vector<std::vector<double>> const& sx, TAD& tad);
+void outputTAD(const std::string& fname, TAD const& tad);
 void runone(DATA& data, int minsz, int maxsz, double penalty, clock_t timeed, clock_t time0);
-void outputBED(const string& fnamebed, TAD const& tad, const string& chrnum, int chrlength, int res);
+void outputBED(const std::string& fnamebed, TAD const& tad, const std::string& chrnum, int chrlength, int res);

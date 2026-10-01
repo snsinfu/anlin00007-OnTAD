@@ -1,4 +1,6 @@
 #include "step2.h"
+
+using namespace std;
 /*---------------------------------------------------------------*/
 /* Step2: calculate local minimum
  *    Input: data from step1

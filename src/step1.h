@@ -1,13 +1,12 @@
+#pragma once
 #include "common.h"
 
-using namespace std;
-
-void loadMatrix(const string& fname, vector<vector<double>>& x, int maxsz); // Step1
+void loadMatrix(const std::string& fname, std::vector<std::vector<double>>& x, int maxsz); // Step1
 void loadMatrixFromHiC(
-    const string& fname,
-    vector<vector<double>>& x,
+    const std::string& fname,
+    std::vector<std::vector<double>>& x,
     int maxsz,
-    const string& hic_norm,
+    const std::string& hic_norm,
     int resolution,
-    const string& chrnum,
+    const std::string& chrnum,
     int chrlength);

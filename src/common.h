@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -10,6 +11,5 @@
 #include "straw.h"
 //#define GSL_DLL
 //#include <gsl/gsl_cdf.h> //use gaussian p-value function
-using namespace std;
 void printProgress(double percentage);
-bool hasEnding(string const& fullString, string const& ending);
+bool hasEnding(std::string const& fullString, std::string const& ending);

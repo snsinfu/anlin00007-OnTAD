@@ -1,4 +1,6 @@
 #include "step1.h"
+
+using namespace std;
 /*---------------------------------------------------------------*/
 /* Step1: read input matrix
  *    Input: matrix file

@@ -1,6 +1,8 @@
 #include "step4.h"
 #include "step2.h"
 #include "common.h"
+
+using namespace std;
 static vector<vector<double>> S, M;
 static vector<vector<int>> B;
 /*---------------------------------------------------------------*/
