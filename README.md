@@ -8,10 +8,10 @@ This is a forked maintenance repo of [OnTAD](https://github.com/anlin00007/OnTAD
 
 ## Docker
 
-Container images are published to GHCR. Workdir is /data and entrypoint is not set in this fork. Specify OnTAD explicitly in the command line to run.
+Container images are published to GHCR and tagged like `v1.4-p1`, where `v1.4` is the upstream version and `p1` is the patch version in this fork. Workdir is `/data` and entrypoint is *not* set in this fork. Specify `OnTAD` explicitly in the command line to run it.
 
 ```
-docker run --rm -v "$PWD:/data" ghcr.io/snsinfu/anlin00007-ontad:v1.4 OnTAD input.mat -o out ...
+docker run --rm -v "$PWD:/data" ghcr.io/snsinfu/anlin00007-ontad:v1.4-p1 OnTAD input.mat -o out ...
 ```
 
 ## Reference
