@@ -53,15 +53,16 @@ void runone(DATA& data, int minsz, int maxsz, double penalty, clock_t timeed, cl
                 tx[k][m] = mytad.mean[j];
             }
         }
-        int k = 0;
-        for (; k < i; k++)
+        bool found = false;
+        for (int k = 0; k < i; k++)
         {
             if (data.tad.bound[k][0] == mytad.bound[j][0] && data.tad.bound[k][1] == mytad.bound[j][1])
             {
+                found = true;
                 break;
             }
         }
-        if (k >= i)
+        if (!found)
         {
             data.tad.bound.push_back(mytad.bound[j]);
             data.tad.level.push_back(mytad.level[j]);
@@ -120,15 +121,16 @@ void dpcall(vector<vector<double>> const& x, vector<vector<double>> const& sx, i
         {
             if (i < l - 1)
             {
-                int j = i + 1;
-                for (; j < l; j++)
+                bool found = false;
+                for (int j = i + 1; j < l; j++)
                 {
                     if (sel[st + i][st + j])
                     {
+                        found = true;
                         break;
                     }
                 }
-                if (j >= l)
+                if (!found)
                 {
                     continue;
                 }
