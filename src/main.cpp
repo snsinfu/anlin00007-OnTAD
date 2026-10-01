@@ -70,26 +70,44 @@ int main(int argc, char* argv[])
 	string allowed_norms[4] = {"NONE", "VC", "VC_SQRT", "KR"};
 	bool norm_is_allowed = false;
 
+	auto needValue = [&](int n) -> bool {
+		if(i + n >= argc) {
+			printf("Error: missing argument for %s\n", argv[i]);
+			return false;
+		}
+		return true;
+	};
+
         for(i = 1; i < argc; i++)
         {
             if(strcmp(argv[i], "-penalty") == 0)
-            {       penalty = atof(argv[i + 1]);
+            {
+                if(!needValue(1)) return -1;
+                penalty = atof(argv[i + 1]);
                 i++;
             }
             else if(strcmp(argv[i], "-maxsz") == 0)
-            {       maxsz = max(10, atoi(argv[i + 1]));
+            {
+                if(!needValue(1)) return -1;
+                maxsz = max(10, atoi(argv[i + 1]));
                 i++;
             }
             else if(strcmp(argv[i], "-minsz") == 0)
-            {       minsz = max(1, atoi(argv[i + 1]));
+            {
+                if(!needValue(1)) return -1;
+                minsz = max(1, atoi(argv[i + 1]));
                 i++;
             }
             else if(strcmp(argv[i], "-lsize") == 0)
-            {       hsz = atoi(argv[i + 1]);
+            {
+                if(!needValue(1)) return -1;
+                hsz = atoi(argv[i + 1]);
                 i++;
             }
             else if(strcmp(argv[i], "-ldiff") == 0)
-            {       ldiff = atof(argv[i + 1]);
+            {
+                if(!needValue(1)) return -1;
+                ldiff = atof(argv[i + 1]);
                 i++;
             }
             else if(strcmp(argv[i], "-log2") == 0)
@@ -99,27 +117,34 @@ int main(int argc, char* argv[])
             {       shuffle = true;
             }
 	    else if(strcmp(argv[i], "-hic_norm") == 0)
-            {   hic_norm = string(argv[i + 1]);
+            {
+                if(!needValue(1)) return -1;
+                hic_norm = string(argv[i + 1]);
                 input_hic = true;
-                for (int i = 0; i < (sizeof(allowed_norms)/sizeof(string)); i++) {
-                	if(hic_norm.compare(allowed_norms[i]))
+                for (int j = 0; j < (int)(sizeof(allowed_norms)/sizeof(string)); j++) {
+                	if(hic_norm == allowed_norms[j])
                 	{
                 		norm_is_allowed = true;
+                		break;
                 	}
         
                 }
                 if(!norm_is_allowed) {
-                	printf("Error: hic_norm must be one of NONE/VC/VC_SQRT/KR");
+                	printf("Error: hic_norm must be one of NONE/VC/VC_SQRT/KR\n");
         		return -1;
                 }
                        i++;
             }
             else if(strcmp(argv[i], "-o") == 0)
-            {       foutpref = argv[i + 1];
+            {
+                if(!needValue(1)) return -1;
+                foutpref = argv[i + 1];
                 i++;
             }
 	    else if(strcmp(argv[i], "-bedout") == 0)
-	    {   bedout = true;
+	    {
+                if(!needValue(3)) return -1;
+                bedout = true;
                 chrnum = argv[i+1];
                 regex chrreg("(.*)");  // allow chr name in any form, e.g. "chr1" or just "1"
 		if ( regex_match(chrnum, chrreg) ){
@@ -193,7 +218,8 @@ int main(int argc, char* argv[])
 	srand(time(0));
 	printf("shuffling matrix"); fflush(stdout);
         int L=(int)data.x.size();
-        for(int I=0;I<=maxsz;I++)
+        int Imax = min(maxsz, L - 1);
+        for(int I=0;I<=Imax;I++)
 	{
           for(int j=0;j<L*10;j++)
   	  { int index1= rand()%(L - I);
