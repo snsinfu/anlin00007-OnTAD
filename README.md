@@ -3,6 +3,8 @@ This is a forked maintenance repo of [OnTAD](https://github.com/anlin00007/OnTAD
 ## Changes
 
 - Container image is now smaller with debian:bookworm-slim
+- Fixed crashes on missing CLI argument and malformed matrix input
+- Added -h and -help options for showing usage
 
 ## Docker
 
