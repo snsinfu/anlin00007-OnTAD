@@ -8,10 +8,7 @@ RUN apt-get update \
 WORKDIR /build
 COPY src/ ./src/
 
-RUN g++ -std=c++11 -O2 \
-      src/main.cpp src/step1.cpp src/step2.cpp src/step3.cpp src/step4.cpp \
-      src/common.cpp src/straw.cpp \
-      -lm -lcurl -lz -o OnTAD
+RUN make -C src
 
 FROM debian:bookworm-slim AS runtime
 
@@ -20,7 +17,7 @@ RUN apt-get update \
       libcurl4 zlib1g ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /build/OnTAD /usr/local/bin/OnTAD
+COPY --from=build /build/src/OnTAD /usr/local/bin/OnTAD
 
 WORKDIR /data
 CMD ["/bin/bash"]
