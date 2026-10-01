@@ -37,7 +37,7 @@ void loadMatrix(const string& fname, vector<vector<double>>& x, int maxsz) //rea
         printf("Cannot open %s\n", fname.c_str());
         exit(EXIT_FAILURE); //stop if cannot find file
     }
-    int nrow = 0;                                                          //name a variable to store row number
+    int nrow = 0;                                                         //name a variable to store row number
     while (fgets(tmp.data(), static_cast<int>(tmp.size()), f) != nullptr) //read the file line by line with maximum string in each line as kMaxLineLen
     {
         l = strlen(tmp.data()); //the number of bytes of each row
