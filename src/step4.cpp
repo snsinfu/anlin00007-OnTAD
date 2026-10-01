@@ -325,35 +325,43 @@ void getBound(int st, int ed, int level, vector<vector<double>> const& x, vector
     }
 }
 
-void outputTAD(char* fname, TAD const& tad)
+void outputTAD(const string& fname, TAD const& tad)
 {
-    int j;
-    FILE* f = fopen(fname, "w");
-    for (j = 0; j < (int)(tad.bound.size()); j++)
+    FILE* f = fopen(fname.c_str(), "w");
+    if (f == nullptr)
+    {
+        printf("Cannot open %s\n", fname.c_str());
+        return;
+    }
+    for (size_t j = 0; j < tad.bound.size(); j++)
     {
         fprintf(f, "%d\t%d\t%d\t%5.3f\t%5.3f\n", tad.bound[j][0] + 1, tad.bound[j][1] + 1, tad.level[j], tad.mean[j], tad.score[j]);
     }
     fclose(f);
 }
 
-void outputBED(char* fnamebed, TAD const& tad, char* chrnum, int chrlength, int res)
+void outputBED(const string& fnamebed, TAD const& tad, const string& chrnum, int chrlength, int res)
 {
-    int j;
-    int tl;
-    int endp;
-    std::map<int, const char*> color_list;
-    color_list[1] = "56,108,176";
-    color_list[2] = "127,201,127";
-    color_list[3] = "190,174,212";
-    color_list[4] = "253,192,134";
-    color_list[5] = "255,0,0";
-    FILE* bedf = fopen(fnamebed, "w");
-    fprintf(bedf, "track name=\"OnTAD %s\" description=\"OnTAD %s\" visibility=2 itemRgb=\"On\"\n", chrnum, chrnum);
-    for (j = 1; j < (int)(tad.bound.size()); j++)
+    static const char* const color_list[] = {
+        "0,0,0", "56,108,176", "127,201,127", "190,174,212", "253,192,134", "255,0,0"};
+    FILE* bedf = fopen(fnamebed.c_str(), "w");
+    if (bedf == nullptr)
     {
+        printf("Cannot open %s\n", fnamebed.c_str());
+        return;
+    }
+    fprintf(bedf, "track name=\"OnTAD %s\" description=\"OnTAD %s\" visibility=2 itemRgb=\"On\"\n", chrnum.c_str(), chrnum.c_str());
+    for (size_t j = 1; j < tad.bound.size(); j++)
+    {
+        int tl;
+        int endp;
         if (tad.level[j] >= 5)
         {
             tl = 5;
+        }
+        else if (tad.level[j] < 0)
+        {
+            tl = 0;
         }
         else
         {
@@ -368,7 +376,7 @@ void outputBED(char* fnamebed, TAD const& tad, char* chrnum, int chrlength, int 
             endp = (tad.bound[j][1] + 1) * res;
         }
         int startp = tad.bound[j][0] * res;
-        fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum, startp, endp, j, startp, endp, color_list[tl]);
+        fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum.c_str(), startp, endp, j, startp, endp, color_list[tl]);
     }
     fclose(bedf);
 }

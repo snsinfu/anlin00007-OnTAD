@@ -19,6 +19,6 @@ typedef struct DATA
 
 void dpcall(vector<vector<double>> const& x, vector<vector<double>> const& sx, int st, int ed, int minsz, int maxsz, double penalty, vector<vector<bool>> const& sel, vector<vector<double>> const& tadn, vector<double> const& boundn, double& score, double& mean);
 void getBound(int st, int ed, int level, vector<vector<double>> const& x, vector<vector<double>> const& sx, TAD& tad);
-void outputTAD(char* fname, TAD const& tad);
+void outputTAD(const string& fname, TAD const& tad);
 void runone(DATA& data, int minsz, int maxsz, double penalty, clock_t timeed, clock_t time0);
-void outputBED(char* fnamebed, TAD const& tad, char* chrnum, int chrlength, int res);
+void outputBED(const string& fnamebed, TAD const& tad, const string& chrnum, int chrlength, int res);

@@ -15,7 +15,6 @@ clock_t time0, timest, timeed;
 **/
 void processData(DATA& data, int maxsz, int hsz, double ldiff)
 {
-    int i, j, k, l;
     vector<vector<double>> sx, sc;
     vector<vector<bool>> lm;
 
@@ -24,7 +23,7 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
     fflush(stdout);
     cumsum(data.x, sx);
     timeed = clock();
-    printf(" Done %5.3fsec (%5.3fsec)\n", (double)(timeed - timest) / 1e6, (double)(timeed - time0) / 1e6);
+    printf(" Done %5.3fsec (%5.3fsec)\n", static_cast<double>(timeed - timest) / 1e6, static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
     timest = timeed;
 
@@ -33,7 +32,7 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
     getScore(sx, maxsz, sc);
     fflush(stdout);
     timeed = clock();
-    printf(" Done %5.3fsec (%5.3fsec)\n", (double)(timeed - timest) / 1e6, (double)(timeed - time0) / 1e6);
+    printf(" Done %5.3fsec (%5.3fsec)\n", static_cast<double>(timeed - timest) / 1e6, static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
     timest = timeed;
 
@@ -42,7 +41,7 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
     calMins(sc, lm, hsz, ldiff);
     setPair(lm, data.sel);
     timeed = clock();
-    printf(" Done %5.3fsec (%5.3fsec)\n", (double)(timeed - timest) / 1e6, (double)(timeed - time0) / 1e6);
+    printf(" Done %5.3fsec (%5.3fsec)\n", static_cast<double>(timeed - timest) / 1e6, static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
     timest = timeed;
 
@@ -51,7 +50,7 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
     HiCnorm(data.x, maxsz * 2);
     fflush(stdout);
     timeed = clock();
-    printf(" Done %5.3fsec (%5.3fsec)\n", (double)(timeed - timest) / 1e6, (double)(timeed - time0) / 1e6);
+    printf(" Done %5.3fsec (%5.3fsec)\n", static_cast<double>(timeed - timest) / 1e6, static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
     timest = timeed;
 }
@@ -59,17 +58,15 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
 /*---------------------------------------------------------------*/
 int main(int argc, char* argv[])
 {
-    int i, j, k, l;
     int maxsz = 200, minsz = 3, hsz = 5;
     double penalty = 0.1, ldiff = 1.96;
 
     string fin;
-    char const* foutpref = "";
+    string foutpref;
     bool takelog2 = false;
-    char* chrnum;
-    //int chrnum;
-    int res;
-    int chrlength;
+    string chrnum;
+    int res = 0;
+    int chrlength = 0;
     bool bedout = false;
     bool input_in = false;
     bool shuffle = false;
@@ -80,7 +77,7 @@ int main(int argc, char* argv[])
     string allowed_norms[4] = {"NONE", "VC", "VC_SQRT", "KR"};
     bool norm_is_allowed = false;
 
-    auto needValue = [&](int n) -> bool
+    auto needValue = [&](int i, int n) -> bool
     {
         if (i + n >= argc)
         {
@@ -90,11 +87,11 @@ int main(int argc, char* argv[])
         return true;
     };
 
-    for (i = 1; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         if (strcmp(argv[i], "-penalty") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -103,7 +100,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-maxsz") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -112,7 +109,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-minsz") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -121,7 +118,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-lsize") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -130,7 +127,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-ldiff") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -147,13 +144,14 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-hic_norm") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
             hic_norm = string(argv[i + 1]);
             input_hic = true;
-            for (int j = 0; j < (int)(sizeof(allowed_norms) / sizeof(string)); j++)
+            norm_is_allowed = false;
+            for (size_t j = 0; j < sizeof(allowed_norms) / sizeof(allowed_norms[0]); j++)
             {
                 if (hic_norm == allowed_norms[j])
                 {
@@ -170,7 +168,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-o") == 0)
         {
-            if (!needValue(1))
+            if (!needValue(i, 1))
             {
                 return -1;
             }
@@ -179,22 +177,13 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(argv[i], "-bedout") == 0)
         {
-            if (!needValue(3))
+            if (!needValue(i, 3))
             {
                 return -1;
             }
             bedout = true;
             chrnum = argv[i + 1];
-            regex chrreg("(.*)"); // allow chr name in any form, e.g. "chr1" or just "1"
-            if (regex_match(chrnum, chrreg))
-            {
-                i++;
-            }
-            else
-            {
-                printf("Error: chrnum is required and must be valid\n");
-                return -1;
-            }
+            i++;
 
             chrlength = atoi(argv[i + 1]);
             regex chrlengthreg("[[:digit:]]+");
@@ -258,29 +247,29 @@ int main(int argc, char* argv[])
     }
     else
     {
-        loadMatrix(fin.c_str(), data.x, maxsz * 2);
+        loadMatrix(fin, data.x, maxsz * 2);
     }
 
     if (takelog2)
     {
-        for (j = 0; j < (int)data.x.size(); j++)
+        for (size_t j = 0; j < data.x.size(); j++)
         {
-            for (k = 0; k < (int)data.x.size(); k++)
+            for (size_t k = 0; k < data.x[j].size(); k++)
             {
                 data.x[j][k] = log2(data.x[j][k] + 1.);
             }
         }
     }
     timeed = clock();
-    printf(" Done %5.3fsec (%5.3fsec)\n", (double)(timeed - timest) / 1e6, (double)(timeed - time0) / 1e6);
+    printf(" Done %5.3fsec (%5.3fsec)\n", static_cast<double>(timeed - timest) / 1e6, static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
 
     if (shuffle)
     {
-        srand(time(0));
+        srand(static_cast<unsigned int>(time(nullptr)));
         printf("shuffling matrix");
         fflush(stdout);
-        int L = (int)data.x.size();
+        const int L = static_cast<int>(data.x.size());
         int Imax = min(maxsz, L - 1);
         for (int I = 0; I <= Imax; I++)
         {
@@ -300,37 +289,22 @@ int main(int argc, char* argv[])
     timeed = clock();
     runone(data, minsz, maxsz, penalty, timeed, time0);
 
-    char fout[std::max(strlen(foutpref), strlen(data.fname.c_str())) + 10];
-    char foutbed[std::max(strlen(foutpref), strlen(data.fname.c_str())) + 10];
-    if (foutpref == "")
-    {
-        sprintf(fout, "%s.tad", data.fname.c_str());
-    }
-    else
-    {
-        sprintf(fout, "%s.tad", foutpref);
-    }
+    const string prefix = foutpref.empty() ? data.fname : foutpref;
+    const string fout = prefix + ".tad";
     outputTAD(fout, data.tad);
 
-    if (bedout == true)
+    if (bedout)
     {
-        if (foutpref == "")
-        {
-            sprintf(foutbed, "%s.bed", data.fname.c_str());
-        }
-        else
-        {
-            sprintf(foutbed, "%s.bed", foutpref);
-        }
+        const string foutbed = prefix + ".bed";
         outputBED(foutbed, data.tad, chrnum, chrlength, res);
     }
     printf("Completed!\n\n");
     fflush(stdout);
-    printf("Output to %s\n\n", fout);
+    printf("Output to %s\n\n", fout.c_str());
     fflush(stdout);
     timeed = clock();
-    printf("Total run time: %5.3fsec\n\n", (double)(timeed - time0) / 1e6);
+    printf("Total run time: %5.3fsec\n\n", static_cast<double>(timeed - time0) / 1e6);
     fflush(stdout);
 
-    return (0);
+    return 0;
 }
