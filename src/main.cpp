@@ -56,6 +56,58 @@ void processData(DATA& data, int maxsz, int hsz, double ldiff)
 }
 
 /*---------------------------------------------------------------*/
+static void printUsage()
+{
+    fputs(
+        R"USAGE(Usage:
+  OnTAD [options] <Hi-C matrix>
+
+Arguments:
+  <Hi-C matrix>  the n*n Hi-C contact matrix. Both raw and normalized matrix are acceptable.
+
+Options:
+  -penalty <float>  The penalty applied in scoring function to select positive
+                    TADs. Higher penalty score will result in fewer TADs.
+                    (default: 0.1)
+
+  -maxsz <int>      The maximum size of TADs can be called. The size is
+                    determined by number of bins covered in the contact matrix.
+                    (default: 200)
+
+  -minsz <int>      The minimum size of TADs can be called. The size is
+                    determined by number of bins covered in the contact matrix.
+                    (default: 3)
+
+  -ldiff <float>    The cut-off to determine local minimum.
+                    (local maximum - local minimum >= ldiff*std)
+                    (default: 1.96)
+
+  -lsize <int>      The local region size that used to determine local minimum
+                    (default: 5)
+
+  -log2             If specified, log2(contact frequency) will be used to call
+                    TADs.
+
+  -bedout <chrnum> <chrlength> <resolution>
+                    The chromosome number, chromosome length and resolution
+                    (bp), e.g -bedout chr3 198022430 10000 will generate
+                    bedfile with coordinates match chr3 at 10Kb resolution
+                    under reference genome hg19. Note: the function of
+                    chromosome length is to define the maximum position for the
+                    TAD at the end of input chromosome. This argument is
+                    required when input .hic file.
+
+  -o <file path>    The file path for the TAD calling results.
+
+  -hic_norm <NONE/VC/VC_SQRT/KR>
+                    The method of normalizations. (default: NONE)
+
+  -h, -help         Print this usage message and exit.
+)USAGE",
+        stdout);
+}
+
+/*---------------------------------------------------------------*/
 int main(int argc, char* argv[])
 {
     int maxsz = 200, minsz = 3, hsz = 5;
@@ -89,7 +141,12 @@ int main(int argc, char* argv[])
 
     for (int i = 1; i < argc; i++)
     {
-        if (strcmp(argv[i], "-penalty") == 0)
+        if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "-help") == 0)
+        {
+            printUsage();
+            return 0;
+        }
+        else if (strcmp(argv[i], "-penalty") == 0)
         {
             if (!needValue(i, 1))
             {
