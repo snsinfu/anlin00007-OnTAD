@@ -14,7 +14,7 @@ FROM debian:bookworm-slim AS runtime
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      libcurl4 zlib1g ca-certificates \
+      libcurl4 zlib1g ca-certificates procps \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /build/src/OnTAD /usr/local/bin/OnTAD
