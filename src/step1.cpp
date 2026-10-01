@@ -105,14 +105,14 @@ void loadMatrixFromHiC(
 
 	size_t length = records.size();
 	int start = 0, end = 0;
-	int print_per_count = length / 20;
-	for (int i = 0; i < length; i++) {
+	int print_per_count = max(1, (int)(length / 20));
+	for (int i = 0; i < (int)length; i++) {
 		start = records[i].binX / resolution;
 		end = records[i].binY / resolution;
-		if (abs(end - start) <= maxsz) {
+		if (start >= 0 && start < L && end >= 0 && end < L && abs(end - start) <= maxsz) {
 			x[start][end] = records[i].counts;
 		}
-		if ((i % print_per_count) == 0) {
+		if (print_per_count > 0 && (i % print_per_count) == 0) {
 			printProgress((double)i / (double)length);
 		}
 	}
