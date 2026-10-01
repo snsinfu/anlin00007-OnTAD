@@ -370,7 +370,7 @@ void outputBED(const string& fnamebed, TAD const& tad, const string& chrnum, int
             endp = (tad.bound[j][1] + 1) * res;
         }
         int startp = tad.bound[j][0] * res;
-        fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum.c_str(), startp, endp, j, startp, endp, color_list[tl]);
+        fprintf(bedf, "%s\t%d\t%d\t%d\t0\t.\t%d\t%d\t%s\n", chrnum.c_str(), startp, endp, static_cast<int>(j), startp, endp, color_list[tl]);
     }
     fclose(bedf);
 }
