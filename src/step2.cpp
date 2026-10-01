@@ -92,16 +92,19 @@ void calMins(vector<vector<double>> const& score, vector<vector<bool>>& lm, int 
         for (int j = 0; j < static_cast<int>(map.size()); j++)
         {
             double mins = score[map[j]][i], maxs = mins;
-            int k = max(0, j - hsz);
-            for (; k < min(static_cast<int>(map.size()), j + hsz + 1); k++)
+            const int k_start = max(0, j - hsz);
+            const int k_end = min(static_cast<int>(map.size()), j + hsz + 1);
+            bool is_local_min = true;
+            for (int k = k_start; k < k_end; k++)
             {
                 if (mins >= score[map[k]][i] && k != j)
                 {
+                    is_local_min = false;
                     break;
                 }
                 maxs = max(maxs, score[map[k]][i]);
             }
-            if (k >= min(l, j + hsz + 1) && maxs - mins > cut)
+            if (is_local_min && maxs - mins > cut)
             {
                 lm[map[j]][i] = true;
             }
