@@ -47,6 +47,10 @@ void loadMatrix(char const *fname, vector<vector<double> > &x, int maxsz) //read
 		if(L == 0) L = k;
 		printProgress((double)(n + 1) / (double)L);
 		if((int)x.size() == 0) x.resize(L);
+		if(n >= (int)x.size())
+		{	printf("Input doesn't match N*N format or was not seperated by TAB or space!");
+			exit(-3);
+		}
 		x[n++] = tx;
 		nrow++;
 	}
@@ -71,6 +75,14 @@ void loadMatrixFromHiC(
 	char const* chrnum,
 	int chrlength)
 {
+	if(resolution <= 0) {
+		printf("Error: resolution must be a positive integer for .hic input\n");
+		exit(-1);
+	}
+	if(chrlength <= 0) {
+		printf("Error: chrlength must be a positive integer for .hic input\n");
+		exit(-1);
+	}
 	string matrixType = "observed";
 	string unit = "BP";
 	vector<contactRecord> records;
