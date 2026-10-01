@@ -227,7 +227,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-    if (input_hic & (!bedout))
+    if (input_hic && !bedout)
     {
         printf("Error: When specify hic input, must specify the outputBED.\n");
         return -1;
