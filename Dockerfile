@@ -23,4 +23,4 @@ RUN apt-get update \
 COPY --from=build /build/OnTAD /usr/local/bin/OnTAD
 
 WORKDIR /data
-ENTRYPOINT ["OnTAD"]
+CMD ["/bin/bash"]
