@@ -1,9 +1,26 @@
-FROM ubuntu:16.04
+FROM debian:bookworm-slim AS build
 
-RUN apt-get update --fix-missing && apt-get install -y file gcc g++ git make wget
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      g++ make libcurl4-openssl-dev zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN cd /opt && git clone https://github.com/anlin00007/OnTAD.git
-RUN              cd /opt/OnTAD/src && make clean && make
-ENV PATH            /opt/OnTAD/src:${PATH}
+WORKDIR /build
+COPY src/ ./src/
 
-CMD /bin/bash
+RUN g++ -std=c++11 -O2 \
+      src/main.cpp src/step1.cpp src/step2.cpp src/step3.cpp src/step4.cpp \
+      src/common.cpp src/straw.cpp \
+      -lm -lcurl -lz -o OnTAD
+
+FROM debian:bookworm-slim AS runtime
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      libcurl4 zlib1g ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /build/OnTAD /usr/local/bin/OnTAD
+
+WORKDIR /data
+ENTRYPOINT ["OnTAD"]
