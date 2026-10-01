@@ -1,0 +1,7 @@
+# build artifacts
+/OnTAD
+/src/OnTAD
+*.o
+
+# test artifacts
+/mES_rep2.40Kb.raw.chr19*
